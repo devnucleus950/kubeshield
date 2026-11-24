@@ -19,7 +19,9 @@
     "sim": "npm run start -w @kubeshield/simulator --",
     "db:migrate": "npm run start -w @kubeshield/migrate",
     "db:count": "npm run count -w @kubeshield/migrate",
-    "test:unit": "KS_UNIT_ONLY=1 vitest run --exclude \"**/*.int.test.ts\" --exclude \"**/node_modules/**\""
+    "test:unit": "KS_UNIT_ONLY=1 vitest run --exclude \"**/*.int.test.ts\" --exclude \"**/node_modules/**\"",
+    "env:init": "bash scripts/init-env.sh",
+    "e2e": "bash scripts/e2e.sh"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
