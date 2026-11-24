@@ -15,6 +15,7 @@ const positiveInt = z.coerce.number().int().positive();
 
 export const ingestConfigSchema = z.object({
   ...common,
+  INGEST_HOST: z.string().default('127.0.0.1'), // bound to loopback so only this machine can reach it
   INGEST_PORT: port.default(4000),
   INGEST_API_KEY: z.string().min(16, 'must be at least 16 characters (use: openssl rand -hex 32)'),
   REDIS_URL: z.string().min(1),
