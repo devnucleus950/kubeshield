@@ -1,0 +1,25 @@
+{
+  "name": "kubeshield",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Kubernetes runtime security platform",
+  "type": "module",
+  "engines": {
+    "node": ">=20.6.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "services/*",
+    "tools/*"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "test": "npm run test --workspaces --if-present",
+    "sim": "npm run start -w @kubeshield/simulator --",
+    "db:migrate": "npm run start -w @kubeshield/migrate",
+    "db:count": "npm run count -w @kubeshield/migrate"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

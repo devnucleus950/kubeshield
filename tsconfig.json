@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/shared" },
+    { "path": "services/ingest" },
+    { "path": "services/worker" },
+    { "path": "tools/simulator" },
+    { "path": "tools/migrate" }
+  ]
+}
