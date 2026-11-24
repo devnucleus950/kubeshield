@@ -42,15 +42,23 @@ export function isDataError(err: unknown): boolean {
 
 async function insertTransaction(pool: pg.Pool, events: NormalizedEvent[]): Promise<number> {
   const client = await pool.connect();
+  // While a client is checked out, the pool does not listen to it. If Postgres
+  // disappears mid-query, the client emits 'error' and, with no listener, Node
+  // would crash the whole worker. The running query rejects with the same
+  // failure and we handle that below, so this listener only has to exist.
+  const swallow = (): void => undefined;
+  client.on('error', swallow);
   try {
     await client.query('BEGIN');
     const { text, values } = buildInsert(events);
     const result = await client.query(text, values);
     await client.query('COMMIT');
+    client.removeListener('error', swallow);
     client.release();
     return result.rowCount ?? 0;
   } catch (err) {
     await client.query('ROLLBACK').catch(() => undefined);
+    client.removeListener('error', swallow);
     client.release(err as Error); // a failed connection is discarded, not reused
     throw err;
   }

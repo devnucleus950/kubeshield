@@ -1,6 +1,8 @@
+import { EventEmitter } from 'node:events';
+import type pg from 'pg';
 import { describe, expect, it } from 'vitest';
 import { falcoEventSchema, normalize, sampleFalcoEvent } from '@kubeshield/shared';
-import { buildInsert, isDataError } from './store.js';
+import { buildInsert, isDataError, storeEvents } from './store.js';
 
 const event = (id: string) =>
   normalize(falcoEventSchema.parse(sampleFalcoEvent()), id, '2026-11-24T10:00:00.000Z');
@@ -29,5 +31,29 @@ describe('isDataError', () => {
     expect(isDataError({ code: '57P01' })).toBe(false);
     expect(isDataError({ code: 'ECONNREFUSED' })).toBe(false);
     expect(isDataError(new Error('boom'))).toBe(false);
+  });
+});
+
+describe('storeEvents when Postgres vanishes mid-query', () => {
+  // Regression: this used to crash the worker with an uncaught 'error' event
+  // on the checked-out connection (found by the Postgres-outage drill).
+  it('rejects with the failure instead of crashing the process', async () => {
+    class DyingClient extends EventEmitter {
+      released: unknown = 'not released';
+      async query(sql: string): Promise<unknown> {
+        if (sql === 'BEGIN' || sql === 'ROLLBACK') return {};
+        queueMicrotask(() => this.emit('error', new Error('terminating connection due to administrator command')));
+        throw Object.assign(new Error('terminating connection due to administrator command'), { code: '57P01' });
+      }
+      release(err?: Error): void {
+        this.released = err ?? 'clean';
+      }
+    }
+    const client = new DyingClient();
+    const pool = { connect: async () => client } as unknown as pg.Pool;
+    await expect(storeEvents(pool, [event('a')])).rejects.toThrow(/terminating connection/);
+    await new Promise((r) => setTimeout(r, 10)); // let the emitted 'error' fire
+    expect(client.released).toBeInstanceOf(Error); // connection discarded, not reused
+    expect(client.listenerCount('error')).toBe(0); // we cleaned up our listener
   });
 });
