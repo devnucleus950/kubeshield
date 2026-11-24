@@ -2,5 +2,11 @@
   "name": "@kubeshield/simulator",
   "version": "0.1.0",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@kubeshield/shared": "*"
+  },
+  "scripts": {
+    "start": "node --env-file=../../.env --import tsx src/cli.ts"
+  }
 }
