@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-azuretools.vscode-docker",
+    "usernamehw.errorlens",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg"
+  ]
+}
