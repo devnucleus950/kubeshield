@@ -14,15 +14,17 @@
   ],
   "scripts": {
     "build": "tsc -b",
-    "test": "npm run test --workspaces --if-present",
+    "test": "vitest run",
     "sim": "npm run start -w @kubeshield/simulator --",
     "db:migrate": "npm run start -w @kubeshield/migrate",
-    "db:count": "npm run count -w @kubeshield/migrate"
+    "db:count": "npm run count -w @kubeshield/migrate",
+    "test:unit": "KS_UNIT_ONLY=1 vitest run --exclude \"**/*.int.test.ts\" --exclude \"**/node_modules/**\""
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
     "@types/pg": "^8.23.1",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1"
   }
 }

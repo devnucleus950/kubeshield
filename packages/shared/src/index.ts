@@ -1,2 +1,5 @@
-// Placeholder so TypeScript has an input file. Real code arrives in a later step.
-export {};
+export * from './falco.js';
+export * from './normalized.js';
+export * from './streams.js';
+export * from './config.js';
+export * from './fixtures.js';

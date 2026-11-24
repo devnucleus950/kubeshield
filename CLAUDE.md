@@ -24,4 +24,4 @@ Everything else in the spec applies unchanged.
 - If the spec seems wrong or unclear, say so instead of guessing.
 
 ## Progress
-(Update this line after each step.) Setup (step 0) done. Steps done: 1, 2, 3.
+(Update this line after each step.) Setup (step 0) done. Steps done: 1, 2, 3, 4.
