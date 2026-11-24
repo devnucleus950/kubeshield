@@ -29,6 +29,10 @@ export const workerConfigSchema = z.object({
   DATABASE_URL: z.string().min(1),
   WORKER_BATCH_SIZE: positiveInt.max(1000).default(50),
   WORKER_MAX_DELIVERIES: positiveInt.default(5),
+  // Tuning knobs. The defaults match the spec; drills and tests shorten them.
+  WORKER_BLOCK_MS: positiveInt.default(5000), // how long a read waits when the stream is empty
+  WORKER_RECLAIM_IDLE_MS: z.coerce.number().int().min(0).default(60_000), // a message idle this long is taken over
+  WORKER_RECLAIM_INTERVAL_MS: positiveInt.default(30_000), // how often the reclaim job runs
 });
 
 export const simulatorConfigSchema = z.object({

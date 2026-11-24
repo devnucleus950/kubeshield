@@ -2,5 +2,16 @@
   "name": "@kubeshield/worker",
   "version": "0.1.0",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@kubeshield/shared": "*",
+    "ioredis": "^6.1.0",
+    "pg": "^8.23.1",
+    "pino": "^10.4.0",
+    "zod": "^4.6.7"
+  },
+  "scripts": {
+    "dev": "tsx watch --env-file=../../.env src/main.ts",
+    "start": "node --env-file=../../.env --import tsx src/main.ts"
+  }
 }
