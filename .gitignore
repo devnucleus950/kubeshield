@@ -11,3 +11,6 @@ coverage/
 !.vscode/settings.json
 !.vscode/extensions.json
 *.tsbuildinfo
+
+# Local-only notes and briefs, not pushed
+docs/
